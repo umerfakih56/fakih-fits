@@ -304,9 +304,9 @@ const ProductGrid: React.FC = () => {
   return (
     <div className="container mx-auto p-4 sm:p-8 py-8 md:py-16">
       <div className="space-y-8 md:space-y-10">
-        {renderProducts(0, 12, "Infants")}
-        {renderProducts(12, 24, "Childhood")}
-        {renderProducts(24, 36, "Adult")}
+        {renderProducts(0, 12, "Kurta Wear")}
+        {renderProducts(12, 24, "Hoodies")}
+        {renderProducts(24, 36, "Pant Coat")}
       </div>
 
       <div className="mt-8 md:mt-10 bg-gray-100 p-4 sm:p-6 rounded-lg shadow-lg">
