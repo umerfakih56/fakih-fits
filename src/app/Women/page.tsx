@@ -265,28 +265,30 @@ const ProductGrid: React.FC = () => {
   const [cart, setCart] = useState<{ id: number; title: string; price: string }[]>([]);
 
   const handleAddToCart = (product: { id: number; title: string; price: string }) => {
-    setCart([...cart, product]);
+    if (!cart.find((item) => item.id === product.id)) {
+      setCart([...cart, product]);
+    }
   };
 
   const renderProducts = (start: number, end: number, title: string) => (
     <>
-      <h2 className="text-center text-4xl font-semibold mb-8">{title}</h2>
-      <div className="grid grid-cols-4 gap-4">
+      <h2 className="text-center text-2xl sm:text-3xl md:text-4xl font-semibold mb-4 sm:mb-6 md:mb-8">{title}</h2>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         {products.slice(start, end).map((product) => (
           <div
             key={product.id}
-            className="bg-gradient-to-r from-pink-100 to-pink-200 rounded-lg shadow-lg p-6 transition-all ease-in-out duration-300 hover:scale-105 transform"
+            className="bg-gradient-to-r from-gray-700 to-gray-300 rounded-lg shadow-lg p-4 md:p-6 transition-transform duration-300 hover:scale-105"
           >
             <img
               src={product.imageUrl}
               alt={product.title}
-              className="w-full h-40 object-contain rounded-lg mb-4"
+              className="w-full h-32 sm:h-40 md:h-48 object-contain rounded-lg mb-2 sm:mb-4"
             />
-            <h3 className="text-xl font-medium">{product.title}</h3>
-            <p className="text-gray-500">{product.price}</p>
+            <h3 className="text-lg sm:text-xl font-medium">{product.title}</h3>
+            <p className="text-white">{product.price}</p>
             <button
               onClick={() => handleAddToCart(product)}
-              className="mt-4 bg-pink-400 text-white py-2 px-4 rounded-full hover:bg-pink-600 transition-colors ease-in-out duration-300"
+              className="mt-4 bg-blue-500 text-white py-2 px-4 rounded-full hover:bg-blue-600 transition-colors duration-300 text-sm sm:text-base"
             >
               Add to Cart
             </button>
@@ -296,23 +298,31 @@ const ProductGrid: React.FC = () => {
     </>
   );
 
+  const calculateTotal = () =>
+    cart.reduce((total, item) => total + parseFloat(item.price.replace("$", "")), 0).toFixed(2);
+
   return (
-    <div className="container mx-auto py-16">
-      <div className="space-y-10">
+    <div className="container mx-auto p-4 sm:p-8 py-8 md:py-16">
+      <div className="space-y-8 md:space-y-10">
         {renderProducts(0, 12, "Summer Wear")}
         {renderProducts(12, 24, "Winter Wear")}
-        {renderProducts(24,36,"Spring/Autumn Wear")}
+        {renderProducts(24, 36, "Spring/Autumn Wear")}
       </div>
-      <div className="mt-10">
-      
-        <ul className="space-y-4">
-          {cart.map((item: { id: React.Key | null | undefined; title: string | number | bigint | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | Promise<React.AwaitedReactNode> | null | undefined; price: string | number | bigint | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | Promise<React.AwaitedReactNode> | null | undefined; }) => (
-            <li key={item.id} className="flex justify-between">
+
+      <div className="mt-8 md:mt-10 bg-gray-100 p-4 sm:p-6 rounded-lg shadow-lg">
+        <h2 className="text-xl sm:text-2xl font-semibold mb-4">Shopping Cart</h2>
+        <ul className="space-y-3 sm:space-y-4">
+          {cart.map((item) => (
+            <li key={item.id} className="flex justify-between text-sm sm:text-base">
               <span>{item.title}</span>
               <span>{item.price}</span>
             </li>
           ))}
         </ul>
+        <div className="mt-4 flex justify-between text-lg sm:text-xl font-medium">
+          <span>Total:</span>
+          <span>Rs{calculateTotal()}</span>
+        </div>
       </div>
     </div>
   );
